@@ -1,0 +1,9 @@
+# YAML Configuration file
+quarkus:
+  http:
+    port: 8080
+    test-port: 8085
+    cors: false
+  mongodb:
+    database: measurement-iot
+    connection-string: mongodb://root:root@localhost:27017
