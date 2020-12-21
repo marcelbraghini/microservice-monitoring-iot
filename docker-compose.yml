@@ -1,13 +1,38 @@
 version: '3.7'
 
 services:
+  monitoring-iot:
+    image: quarkus/monitoring-iot-jvm
+    container_name: monitoring-iot
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    working_dir: /dock monitoring-iot
+    volumes:
+      - ./monitoring-iot:/monitoring-iot
+      - ~/.m2:/root/.m2
+    depends_on:
+      - mongodb
+    command: ./mvnw compile quarkus:dev
+    networks:
+      - private
   mongodb:
     image: mongo:latest
     container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+    expose:
+      - 27017
     ports:
       - 27017:27017
     volumes:
       - /tmp/docker/volumes/mongodb:/data/db
+    healthcheck:
+      test: "exit 0"
+    networks:
+      - private
+networks:
+  private:
+    driver: bridge
